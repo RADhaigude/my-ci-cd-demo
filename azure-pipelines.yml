@@ -1,19 +1,24 @@
 trigger:
-  - main
+- main  # Trigger on push to 'main' branch
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Default  # Replace with your actual agent pool name if different
+  demands:
+    - 'agent.name -equals agent1'  # ✅ Quoted to avoid YAML parsing error
 
 steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '16.x'
-    displayName: 'Install Node.js'
+- script: echo "🤖 Running on self-hosted agent: agent1"
+  displayName: 'Verify Self-Hosted Agent'
 
-  - script: |
-      npm install
-      npm run build || echo "No build step defined"
-    displayName: 'Install dependencies and build'
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
+  displayName: 'Install Node.js'
 
-  - script: echo "✅ Build completed!"
-    displayName: 'Post-build step'
+- script: |
+    npm install
+  displayName: 'Install dependencies'
+
+- script: |
+    npm run build || echo "⚠️ No build step found"
+  displayName: 'Build the App'
