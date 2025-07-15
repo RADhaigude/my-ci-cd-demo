@@ -1,24 +1,31 @@
 trigger:
-- main  # Automatically run this pipeline on main branch push
+  - main  # ✅ Run when pushing to the 'main' branch
 
 pool:
-  name: Default            # 🧠 Make sure this is the correct pool name in Azure DevOps
+  name: Default  # ✅ Your custom pool
   demands:
-    - "agent.name -equals agent1"  # ✅ Target your self-hosted agent named 'agent1'
+    - agent.name -equals agent1  # ✅ Force use of self-hosted agent1
 
 steps:
-- script: echo "✅ Running on self-hosted agent: agent1"
-  displayName: 'Verify agent connection'
+  - checkout: self  # ✅ Makes sure your code is pulled into the pipeline workspace
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: '16.x'
-  displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.x'
+    displayName: '📦 Install Node.js'
 
-- script: |
-    npm install
-  displayName: 'Install dependencies'
+  - script: |
+      echo "📂 Listing files to verify package.json exists:"
+      dir
+    displayName: '📁 Verify working directory'
 
-- script: |
-    npm run build || echo "⚠️ No build step defined"
-  displayName: 'Build the app'
+  - script: |
+      npm install
+    displayName: '📥 Install dependencies'
+
+  - script: |
+      npm run build || echo "⚠️ No build script defined in package.json"
+    displayName: '🛠️ Build the app'
+
+  - script: echo "✅ CI pipeline finished successfully"
+    displayName: '✅ Post-build step'
