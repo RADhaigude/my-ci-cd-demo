@@ -1,14 +1,14 @@
 trigger:
-- main
+- main  # Automatically run this pipeline on main branch push
 
 pool:
-  name: Default
+  name: Default            # 🧠 Make sure this is the correct pool name in Azure DevOps
   demands:
-    - 'agent.name -equals agent1'  # ✅ Quoted string prevents mapping error
+    - "agent.name -equals agent1"  # ✅ Target your self-hosted agent named 'agent1'
 
 steps:
-- script: echo "🤖 Running on self-hosted agent: agent1"
-  displayName: 'Check Agent'
+- script: echo "✅ Running on self-hosted agent: agent1"
+  displayName: 'Verify agent connection'
 
 - task: NodeTool@0
   inputs:
@@ -20,5 +20,5 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    npm run build || echo "⚠️ No build step found"
-  displayName: 'Build the App'
+    npm run build || echo "⚠️ No build step defined"
+  displayName: 'Build the app'
