@@ -1,14 +1,14 @@
 trigger:
-- main  # Trigger on push to 'main' branch
+- main
 
 pool:
-  name: Default  # Replace with your actual agent pool name if different
+  name: Default
   demands:
-    - 'agent.name -equals agent1'  # ✅ Quoted to avoid YAML parsing error
+    - 'agent.name -equals agent1'  # ✅ Quoted string prevents mapping error
 
 steps:
 - script: echo "🤖 Running on self-hosted agent: agent1"
-  displayName: 'Verify Self-Hosted Agent'
+  displayName: 'Check Agent'
 
 - task: NodeTool@0
   inputs:
